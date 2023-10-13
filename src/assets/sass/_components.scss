@@ -1,0 +1,19 @@
+//THEME
+
+* {
+  background-color: rgb(62, 61, 61);
+}
+
+// DATE TIME INPUT
+.date-time-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: white;
+
+  input {
+    color: white;
+  }
+}

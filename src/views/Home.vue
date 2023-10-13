@@ -1,12 +1,12 @@
 <template>
-  <TimeInputVue />
+  <DateTimeInput />
 </template>
 
 <script>
-import TimeInputVue from "../components/TimeInput.vue";
+import DateTimeInput from "../components/DateTimeInput.vue";
 export default {
   components: {
-    TimeInputVue,
+    DateTimeInput,
   },
 };
 </script>
