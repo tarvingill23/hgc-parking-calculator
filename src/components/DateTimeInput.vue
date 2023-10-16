@@ -1,20 +1,46 @@
 <template>
   <div class="date-time-container">
+    <h1>Current Date & Time</h1>
+    <h2>{{ dateTime }}</h2>
     <div>
-      <h1>Date</h1>
-      <input type="date" placeholder="Date" v-model="ticketDate" />
-      {{ date }}
+      <input type="date" v-model="ticketDate" />
+      <input type="time" v-model="ticketTime" />
+      <button @click="timeElapsed()">Calculate</button>
     </div>
-    <div>
-      <h1>Time</h1>
-      <input type="time" placeholder="Insert time here" v-model="time" />
-      {{ time }}
-    </div>
+    <h1>Guest has parked for {{ hoursElapsed }} hours</h1>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  mounted() {
+    this.setDefaultDateTime();
+    var newYork = moment.tz("2014-06-01 12:00", "America/New_York");
+  },
+  data() {
+    return {
+      dateTime: new Date(),
+      ticketDate: "",
+      ticketTime: "",
+      ticketDateTime: "",
+      epochTimeNow: Date.now(),
+      millisecondsElapsed: 0,
+      hoursElapsed: 0,
+    };
+  },
+  methods: {
+    setDefaultDateTime() {
+      this.ticketDate = `${this.dateTime.getFullYear()}-${
+        this.dateTime.getMonth() + 1
+      }-${this.dateTime.getDate()}`;
+    },
+    timeElapsed() {
+      this.ticketDateTime = new Date(`${this.ticketDate} ${this.ticketTime}`);
+      this.millisecondsElapsed = this.epochTimeNow - this.ticketDateTime;
+      this.hoursElapsed = `${Math.floor(this.millisecondsElapsed / 3600000)}`;
+    },
+  },
+};
 </script>
 
 <style></style>
