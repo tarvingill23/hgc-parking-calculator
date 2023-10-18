@@ -1,16 +1,14 @@
 <template>
   <div class="date-time-container">
-    <h1>Current Date & Time</h1>
-    <h2>{{ dateTime }}</h2>
+    <h1>Ticket Date & Time</h1>
     <div>
       <input type="date" v-model="ticketDate" />
       <input type="time" v-model="ticketTime" />
-      <button @click="timeElapsed()">Calculate</button>
+      <button @click="calculateTime()">Calculate</button>
     </div>
     <h1>{{ displayMessage }}</h1>
     <h1>{{ priceMessage }}</h1>
-    <button @click="showTable()">Show Table</button>
-    <table v-show="show" class="price-table">
+    <table class="price-table">
       <tr>
         <th>Time</th>
         <th>Price</th>
@@ -26,18 +24,13 @@
 <script>
 import priceData from "../assets/pricing.json";
 export default {
-  mounted() {
-    this.setDefaultDateTime();
-  },
   data() {
     return {
-      show: false,
-      totalPrice: 0,
-      priceMessage: "",
       prices: priceData,
+      priceMessage: "",
+      totalPrice: 0,
       dateTime: new Date(),
-      ticketDate: "",
-      ticketTime: "14:04:00",
+      ticketTime: "14:00:00",
       ticketDateTime: "",
       epochTimeNow: Date.now(),
       remainderMinutesElapsed: 0,
@@ -49,26 +42,15 @@ export default {
   },
   methods: {
     calculatePrice() {
+      this.earlyBird();
       priceData.forEach((element) => {
         if (element.hour === this.hoursElapsedRoundedUp) {
           this.totalPrice = element.price;
-          this.priceMessage = `Guest owes $${this.totalPrice} dollars`;
+          this.priceMessage = `Total Price: $${this.totalPrice}`;
         }
       });
     },
-    showTable() {
-      if (this.show === true) {
-        this.show = false;
-      } else {
-        this.show = true;
-      }
-    },
-    setDefaultDateTime() {
-      this.ticketDate = `${this.dateTime.getFullYear()}-${
-        this.dateTime.getMonth() + 1
-      }-${this.dateTime.getDate()}`;
-    },
-    timeElapsed() {
+    calculateTime() {
       this.ticketDateTime = new Date(`${this.ticketDate} ${this.ticketTime}`);
       this.millisecondsElapsed = this.epochTimeNow - this.ticketDateTime;
       this.hoursElapsedRoundedUp = Math.ceil(
@@ -82,11 +64,16 @@ export default {
     },
   },
   computed: {
+    ticketDate() {
+      return `${this.dateTime.getFullYear()}-${
+        this.dateTime.getMonth() + 1
+      }-${this.dateTime.getDate()}`;
+    },
     displayMessage() {
       if (this.ticketDateTime > this.epochTimeNow) {
         return `The ticket date is set in the future, please check the inputs again`;
       } else {
-        return `Guest has parked for ${this.hoursElapsed} hours and ${this.minutesElapsed} minutes. Guest has been charged for ${this.hoursElapsedRoundedUp} hours`;
+        return ` ${this.hoursElapsed} hours and ${this.minutesElapsed} minutes. Guest has been charged for ${this.hoursElapsedRoundedUp} hours`;
       }
     },
   },
